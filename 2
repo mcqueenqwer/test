@@ -1,0 +1,32 @@
+import addressbook_pb2
+
+# 创建一个新的 Person 物件
+person = addressbook_pb2.Person()
+person.name = "John"
+person.id = 1234
+person.email = "john@example.com"
+
+# 添加两个手机号码
+phone1 = person.phones.add()
+phone1.number = "555-1234"
+phone1.type = addressbook_pb2.Person.HOME
+
+phone2 = person.phones.add()
+phone2.number = "555-5678"
+phone2.type = addressbook_pb2.Person.WORK
+
+# 创建一个新的 AddressBook 物件，將 Person 添加到其中
+address_book = addressbook_pb2.AddressBook()
+address_book.people.append(person)
+
+# 將 AddressBook 写入 binary 档案
+with open("addressbook.bin", "wb") as f:
+    f.write(address_book.SerializeToString())
+
+# 从档案中读取出 AddressBook
+with open("addressbook.bin", "rb") as f:
+    address_book_from_file = addressbook_pb2.AddressBook()
+    address_book_from_file.ParseFromString(f.read())
+
+# 输出从档案中读取出的 AddressBook
+print(address_book_from_file)
