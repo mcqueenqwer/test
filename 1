@@ -1,0 +1,17 @@
+import requests
+import json
+
+emails = set()  # 用 set 存 email，避免重复
+
+for i in range(1, 101):
+    url = f"https://jsonplaceholder.typicode.com/posts/{i}/comments"
+    response = requests.get(url)
+    if response.ok:
+        data = json.loads(response.text)
+        for comment in data:
+            email = comment['email']
+            emails.add(email)
+
+with open('emails.txt', 'w') as f:
+    for email in emails:
+        f.write(email + '\n')
